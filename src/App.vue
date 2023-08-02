@@ -1,26 +1,26 @@
 <template lang="pug">
-    el-container
-        el-header(height="70px").flex.aic.header
-            h1.c-pointer.flex-grow(@click="go(-1)") {{ loadedModule ? loadedModule.name : "" }}
-            el-select.ml2(:value="selectedModuleName", @change="onSelectedModuleChanged", placeholder="Module")
-                el-option(v-for="m in modules", :key="m.name", :label="m.name", :value="m.name")
-        el-container(v-loading="loading")
-            el-aside.aside
-                el-menu.no-border(:default-active="reflection ? reflection.id.toString() : '-1'")
-                    el-menu-item(index="-1", @click="go(-1)") Home
-                    el-submenu(v-for="(group, i) in (raw ? raw.groups : [])", :key="i", :index="'h' + i.toString()")
-                        template(slot="title") {{ group.title }}
-                        el-menu-item(v-for="n in group.children", :key="n", :index="n.toString()", @click="go(n)")
-                            type-icon.mr1(:kind="getReflection(n).kind")
-                            | {{ getReflection(n).name }}
-            el-main
-                reflection-renderer(v-if="reflection" :reflection="reflection")
-                table-of-contents(v-else-if="loadedModule", :reflections="raw.children")
-                    template(v-slot:default="{ reflection }")
-                        reference-renderer(:reflection="reflection")
-                            type-icon.mr1(:kind="reflection.kind")
-                            | {{ reflection.name }}
-                el-alert(v-else-if="!loading", type="warning", show-icon) Module "{{ $route.params.module }}" not found
+el-container
+    el-header(height="70px").flex.aic.header
+        h1.c-pointer.flex-grow(@click="go(-1)") {{ loadedModule ? loadedModule.name : "" }}
+        el-select.ml2(:value="selectedModuleName", @change="onSelectedModuleChanged", placeholder="Module")
+            el-option(v-for="m in modules", :key="m.name", :label="m.name", :value="m.name")
+    el-container(v-loading="loading")
+        el-aside.aside
+            el-menu.no-border(:default-active="reflection ? reflection.id.toString() : '-1'")
+                el-menu-item(index="-1", @click="go(-1)") Home
+                el-submenu(v-for="(group, i) in (raw ? raw.groups : [])", :key="i", :index="'h' + i.toString()")
+                    template(slot="title") {{ group.title }}
+                    el-menu-item(v-for="n in group.children", :key="n", :index="n.toString()", @click="go(n)")
+                        type-icon.mr1(:kind="getReflection(n).kind")
+                        | {{ getReflection(n).name }}
+        el-main
+            reflection-renderer(v-if="reflection" :reflection="reflection")
+            table-of-contents(v-else-if="loadedModule", :reflections="raw.children")
+                template(v-slot:default="{ reflection }")
+                    reference-renderer(:reflection="reflection")
+                        type-icon.mr1(:kind="reflection.kind")
+                        | {{ reflection.name }}
+            el-alert(v-else-if="!loading", type="warning", show-icon) Module "{{ $route.params.module }}" not found
 </template>
 
 <script lang="ts">
